@@ -20,7 +20,7 @@
   },
   "scripts": {
     "skpm": "skpm",
-    "skpm:publish": "skpm publish --skip-registry --skip-release",
+    "skpm:publish": "skpm publish --skip-registry --open-release",
     "build": "skpm-build",
     "watch": "skpm-build --watch",
     "start": "skpm-build --watch --run",
