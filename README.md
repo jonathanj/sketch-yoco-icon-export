@@ -44,17 +44,7 @@ npm run start
 npm run skpm:publish <version_bump>
 ```
 
-Where `version_bump` can be `patch`, `minor` or `major`.
+(Where `version_bump` can be `patch`, `minor` or `major`.)
 
-`skpm publish` will create a new release on your GitHub repository and create an appcast file in order for Sketch users to be notified of the update.
-
-You will need to specify a `repository` in the `package.json`:
-
-```diff
-...
-+ "repository" : {
-+   "type": "git",
-+   "url": "git+https://github.com/ORG/NAME.git"
-+  }
-...
-```
+This will create a new release in the GitHub repository, and update the appcast
+file so that existing users of the plugin will be notified of an update.
