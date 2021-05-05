@@ -4,7 +4,8 @@
   "icon": "icon.png",
   "author": "Jonathan Jacobs",
   "authorEmail": "jonathan@yoco.com",
-  "version": "1.0.2",
+  "homepage": "https://github.com/jonathanj/sketch-yoco-icon-export",
+  "appcast": "https://raw.githubusercontent.com/jonathanj/sketch-yoco-icon-export/master/.appcast.xml",
   "description": "Prepare and export stroked icons for the Yoco icon library.",
   "commands": [
     {
@@ -19,7 +20,7 @@
       "sketch-icon-export.my-command-identifier"
     ]
   },
+  "version": "1.0.4",
   "identifier": "yoco-icon-export",
-  "disableCocoaScriptPreprocessor": true,
-  "appcast": "https://raw.githubusercontent.com/jonathanj/sketch-yoco-icon-export/master/.appcast.xml"
+  "disableCocoaScriptPreprocessor": true
 }

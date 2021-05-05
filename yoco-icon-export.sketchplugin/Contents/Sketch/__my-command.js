@@ -1,1 +1,1239 @@
-var globalThis=this,global=this;function __skpm_run(e,t){globalThis.context=t;try{var n=function(e){var t={};function n(r){if(t[r])return t[r].exports;var o=t[r]={i:r,l:!1,exports:{}};return e[r].call(o.exports,o,o.exports,n),o.l=!0,o.exports}return n.m=e,n.c=t,n.d=function(e,t,r){n.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:r})},n.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},n.t=function(e,t){if(1&t&&(e=n(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var r=Object.create(null);if(n.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var o in e)n.d(r,o,function(t){return e[t]}.bind(null,o));return r},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,"a",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p="",n(n.s=13)}([function(e,t){e.exports=require("sketch")},function(e,t,n){var r=n(8),o=n(9),i=n(10),a=n(12);e.exports=function(e,t){return r(e)||o(e,t)||i(e,t)||a()},e.exports.default=e.exports,e.exports.__esModule=!0},function(e,t,n){(function(t){e.exports.getURL=function(e){return NSURL.URLWithString(String(NSString.stringWithString(e).stringByExpandingTildeInPath()).replace(/ /g,"%20"))},e.exports.runDialog=function(e,n,r){if(!r){var o=e.runModal();return t.resolve(n(e,o))}var i=coscript.createFiber(),a=(r.sketchObject||r).documentWindow();return new t((function(t,r){e.beginSheetModalForWindow_completionHandler(a,__mocha__.createBlock_function("v16@?0q8",(function(o){try{t(n(e,o))}catch(a){r(a)}NSApp.endSheet(e),i?i.cleanup():coscript.shouldKeepAround=!1})))}))},e.exports.runDialogSync=function(e,t,n){var r;if(!n)return r=e.runModal(),t(e,r);var o=(n.sketchObject||n).documentWindow();return e.beginSheetModalForWindow_completionHandler(o,__mocha__.createBlock_function("v16@?0q8",(function(e){NSApp.stopModalWithCode(e)}))),r=NSApp.runModalForWindow(o),NSApp.endSheet(e),t(e,r)}}).call(this,n(7))},function(e,t,n){var r=n(2);function o(e,t){e&&("function"==typeof e.isKindOfClass||e.sketchObject)||(t=e,e=void 0),t||(t={});var n=NSOpenPanel.openPanel();if(t.title&&(n.title=t.title),t.defaultPath&&n.setDirectoryURL(r.getURL(t.defaultPath)),t.buttonLabel&&(n.prompt=t.buttonLabel),t.filters&&t.filters.length){var o=[];t.filters.forEach((function(e){e.extensions.forEach((function(e){o.push(e)}))})),n.allowedFileTypes=o}var i=Array.isArray(t.properties)&&t.properties.length>0;return n.canChooseFiles=i&&-1!==t.properties.indexOf("openFile"),n.canChooseDirectories=i&&-1!==t.properties.indexOf("openDirectory"),n.allowsMultipleSelection=i&&-1!==t.properties.indexOf("multiSelections"),n.showsHiddenFiles=i&&-1!==t.properties.indexOf("showHiddenFiles"),n.canCreateDirectories=i&&-1!==t.properties.indexOf("createDirectory"),n.resolvesAliases=!i||-1===t.properties.indexOf("noResolveAliases"),n.treatsFilePackagesAsDirectories=i&&-1!==t.properties.indexOf("treatPackageAsDirectory"),t.message&&(n.message=t.message),{document:e,options:t,dialog:n}}e.exports.openDialog=function(e,t){var n=o(e,t);return r.runDialog(n.dialog,(function(e,t){if(t!=NSOKButton)return{canceled:!0,filePaths:[]};for(var n=[],r=e.URLs(),o=0;o<r.length;o+=1)n.push(String(r[o].path()));return{canceled:!1,filePaths:n}}),n.document)},e.exports.openDialogSync=function(e,t){var n=o(e,t);return r.runDialogSync(n.dialog,(function(e,t){if(t!=NSOKButton)return[];for(var n=[],r=e.URLs(),o=0;o<r.length;o+=1)n.push(String(r[o].path()));return n}),n.document)}},function(e,t,n){var r=n(2);function o(e,t){e&&("function"==typeof e.isKindOfClass||e.sketchObject)||(t=e,e=void 0),t||(t={});var n=NSSavePanel.savePanel();if(t.title&&(n.title=t.title),t.defaultPath)if(n.setDirectoryURL(r.getURL(t.defaultPath)),"."===t.defaultPath[0]||"~"===t.defaultPath[0]||"/"===t.defaultPath[0]){var o=t.defaultPath.split("/");o.length>1&&o[o.length-1]&&n.setNameFieldStringValue(o[o.length-1])}else n.setNameFieldStringValue(t.defaultPath);if(t.buttonLabel&&(n.prompt=t.buttonLabel),t.filters&&t.filters.length){var i=[];t.filters.forEach((function(e){e.extensions.forEach((function(e){i.push(e)}))})),n.allowedContentTypes?n.allowedContentTypes=i.map(e=>UTType.typeWithFilenameExtension(e)):n.allowedFileTypes=i}return t.message&&(n.message=t.message),t.nameFieldLabel&&(n.nameFieldLabel=t.nameFieldLabel),t.showsTagField&&(n.showsTagField=t.showsTagField),{document:e,options:t,dialog:n}}e.exports.saveDialog=function(e,t){var n=o(e,t);return r.runDialog(n.dialog,(function(e,t){return{canceled:t!=NSOKButton,filePath:t==NSOKButton?String(e.URL().path()):void 0}}),n.document)},e.exports.saveDialogSync=function(e,t){var n=o(e,t);return r.runDialogSync(n.dialog,(function(e,t){return t==NSOKButton?String(e.URL().path()):void 0}),n.document)}},function(e,t,n){var r=n(2),o={none:0,info:1,error:2,question:1,warning:2};function i(e,t){!e||"function"!=typeof e.isKindOfClass&&!e.sketchObject?(t=e,e=void 0):e.sketchObject&&(e=e.sketchObject),t||(t={});var n=NSAlert.alloc().init();if(t.type&&(n.alertStyle=o[t.type]||0),t.buttons&&t.buttons.length&&t.buttons.forEach((function(e){n.addButtonWithTitle(t.normalizeAccessKeys?e.replace(/&/g,""):e)})),void 0!==t.defaultId){var r=n.buttons();t.defaultId<r.length&&(r[0].setKeyEquivalent(""),r[t.defaultId].setKeyEquivalent("\r"))}if(t.title,t.message&&(n.messageText=t.message),t.detail&&(n.informativeText=t.detail),t.checkboxLabel&&(n.showsSuppressionButton=!0,n.suppressionButton().title=t.checkboxLabel,void 0!==t.checkboxChecked&&(n.suppressionButton().state=t.checkboxChecked?NSOnState:NSOffState)),t.icon)"string"==typeof t.icon&&(t.icon=NSImage.alloc().initWithContentsOfFile(t.icon)),n.icon=t.icon;else if("undefined"!=typeof __command&&__command.pluginBundle()&&__command.pluginBundle().icon())n.icon=__command.pluginBundle().icon();else{var i=NSImage.imageNamed("plugins");i&&(n.icon=i)}return{document:e,options:t,dialog:n}}e.exports.messageBox=function(e,t){var n=i(e,t);return r.runDialog(n.dialog,(function(e,t){return{response:n.options.buttons&&n.options.buttons.length?Number(t)-1e3:Number(t),checkboxChecked:e.suppressionButton().state()==NSOnState}}),n.document)},e.exports.messageBoxSync=function(e,t){var n=i(e,t);return r.runDialogSync(n.dialog,(function(e,t){return n.options.buttons&&n.options.buttons.length?Number(t)-1e3:Number(t)}),n.document)}},function(e,t,n){e.exports={showOpenDialog:n(3).openDialog,showOpenDialogSync:n(3).openDialogSync,showSaveDialog:n(4).saveDialog,showSaveDialogSync:n(4).saveDialogSync,showMessageBox:n(5).messageBox,showMessageBoxSync:n(5).messageBoxSync}},function(e,t){function n(){}function r(e){if(!(this instanceof r))throw new TypeError("Promises must be constructed via new");if("function"!=typeof e)throw new TypeError("not a function");this._state=0,this._handled=!1,this._value=void 0,this._deferreds=[],c(e,this)}function o(e,t){for(;3===e._state;)e=e._value;0!==e._state?(e._handled=!0,r._immediateFn((function(){var n=1===e._state?t.onFulfilled:t.onRejected;if(null!==n){var r;try{r=n(e._value)}catch(o){return void a(t.promise,o)}i(t.promise,r)}else(1===e._state?i:a)(t.promise,e._value)}))):e._deferreds.push(t)}function i(e,t){try{if(t===e)throw new TypeError("A promise cannot be resolved with itself.");if(t&&("object"==typeof t||"function"==typeof t)){var n=t.then;if(t instanceof r)return e._state=3,e._value=t,void s(e);if("function"==typeof n)return void c(n.bind(t),e)}e._state=1,e._value=t,s(e)}catch(o){a(e,o)}}function a(e,t){e._state=2,e._value=t,s(e)}function s(e){2===e._state&&0===e._deferreds.length&&r._immediateFn((function(){e._handled||r._unhandledRejectionFn(e._value,e)}));for(var t=0,n=e._deferreds.length;t<n;t++)o(e,e._deferreds[t]);e._deferreds=null}function u(e,t,n){this.onFulfilled="function"==typeof e?e:null,this.onRejected="function"==typeof t?t:null,this.promise=n}function c(e,t){var n=!1;try{e((function(e){n?r._multipleResolvesFn("resolve",t,e):(n=!0,i(t,e))}),(function(e){n?r._multipleResolvesFn("reject",t,e):(n=!0,a(t,e))}))}catch(o){if(n)return void r._multipleResolvesFn("reject",t,o);n=!0,a(t,o)}}r.prototype.catch=function(e){return this.then(null,e)},r.prototype.then=function(e,t){var r=new this.constructor(n);return o(this,new u(e,t,r)),r},r.prototype.finally=function(e){var t=this.constructor;return this.then((function(n){return t.resolve(e()).then((function(){return n}))}),(function(n){return t.resolve(e()).then((function(){return t.reject(n)}))}))},r.all=function(e){return new r((function(t,n){if(!Array.isArray(e))return n(new TypeError("Promise.all accepts an array"));var r=Array.prototype.slice.call(e);if(0===r.length)return t([]);var o=r.length;function i(e,a){try{if(a&&("object"==typeof a||"function"==typeof a)){var s=a.then;if("function"==typeof s)return void s.call(a,(function(t){i(e,t)}),n)}r[e]=a,0==--o&&t(r)}catch(u){n(u)}}for(var a=0;a<r.length;a++)i(a,r[a])}))},r.resolve=function(e){return e&&"object"==typeof e&&e.constructor===r?e:new r((function(t){t(e)}))},r.reject=function(e){return new r((function(t,n){n(e)}))},r.race=function(e){return new r((function(t,n){if(!Array.isArray(e))return n(new TypeError("Promise.race accepts an array"));for(var o=0,i=e.length;o<i;o++)r.resolve(e[o]).then(t,n)}))},r._immediateFn=setImmediate,r._unhandledRejectionFn=function(e,t){"undefined"!=typeof process&&process.listenerCount&&(process.listenerCount("unhandledRejection")||process.listenerCount("uncaughtException"))?(process.emit("unhandledRejection",e,t),process.emit("uncaughtException",e,"unhandledRejection")):"undefined"!=typeof console&&console&&console.warn("Possible Unhandled Promise Rejection:",e)},r._multipleResolvesFn=function(e,t,n){"undefined"!=typeof process&&process.emit&&process.emit("multipleResolves",e,t,n)},e.exports=r},function(e,t){e.exports=function(e){if(Array.isArray(e))return e},e.exports.default=e.exports,e.exports.__esModule=!0},function(e,t){e.exports=function(e,t){var n=e&&("undefined"!=typeof Symbol&&e[Symbol.iterator]||e["@@iterator"]);if(null!=n){var r,o,i=[],a=!0,s=!1;try{for(n=n.call(e);!(a=(r=n.next()).done)&&(i.push(r.value),!t||i.length!==t);a=!0);}catch(u){s=!0,o=u}finally{try{a||null==n.return||n.return()}finally{if(s)throw o}}return i}},e.exports.default=e.exports,e.exports.__esModule=!0},function(e,t,n){var r=n(11);e.exports=function(e,t){if(e){if("string"==typeof e)return r(e,t);var n=Object.prototype.toString.call(e).slice(8,-1);return"Object"===n&&e.constructor&&(n=e.constructor.name),"Map"===n||"Set"===n?Array.from(e):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?r(e,t):void 0}},e.exports.default=e.exports,e.exports.__esModule=!0},function(e,t){e.exports=function(e,t){(null==t||t>e.length)&&(t=e.length);for(var n=0,r=new Array(t);n<t;n++)r[n]=e[n];return r},e.exports.default=e.exports,e.exports.__esModule=!0},function(e,t){e.exports=function(){throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")},e.exports.default=e.exports,e.exports.__esModule=!0},function(e,t,n){"use strict";n.r(t);var r=n(0),o=n.n(r),i=n(6),a=n.n(i),s=n(1),u=n.n(s);function c(e){var t,n,r=new o.a.Artboard({name:"Scratch",parent:e}),i=r.frame.changeBasis({from:r,to:r.parent}),a=(t=e.layers.reduce((function(e,t){var n=u()(e,2),r=n[0],o=n[1],i=t.frame.x+t.frame.width,a=t.frame.y;return[i>r?i:r,a<o?a:o]}),[Number.NEGATIVE_INFINITY,Number.POSITIVE_INFINITY]),[(n=u()(t,2))[0]+50,n[1]]),s=u()(a,2),c=s[0],l=s[1];return i.x=c,i.y=l,r.frame=i,r}function l(e,t){var n="undefined"!=typeof Symbol&&e[Symbol.iterator]||e["@@iterator"];if(!n){if(Array.isArray(e)||(n=function(e,t){if(!e)return;if("string"==typeof e)return f(e,t);var n=Object.prototype.toString.call(e).slice(8,-1);"Object"===n&&e.constructor&&(n=e.constructor.name);if("Map"===n||"Set"===n)return Array.from(e);if("Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))return f(e,t)}(e))||t&&e&&"number"==typeof e.length){n&&(e=n);var r=0,o=function(){};return{s:o,n:function(){return r>=e.length?{done:!0}:{done:!1,value:e[r++]}},e:function(e){throw e},f:o}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var i,a=!0,s=!1;return{s:function(){n=n.call(e)},n:function(){var e=n.next();return a=e.done,e},e:function(e){s=!0,i=e},f:function(){try{a||null==n.return||n.return()}finally{if(s)throw i}}}}function f(e,t){(null==t||t>e.length)&&(t=e.length);for(var n=0,r=new Array(t);n<t;n++)r[n]=e[n];return r}var p=o.a.Shape,d=o.a.Rectangle;function h(e){return e.name.toLowerCase().includes("background")}t.default=function(){var e=o.a.getSelectedDocument(),t=e.selectedLayers,n=t.length;if(0===n)o.a.UI.message("No layers are selected, nothing to do");else{var r=a.a.showOpenDialogSync(e,{title:"Select export folder…",properties:["openDirectory","createDirectory"]});if(1!==r.length)return void o.a.UI.message("Cancelled");var i=r[0];o.a.UI.message("Preparing "+n+" object(s)…");var s=c(e.selectedPage),u=t.layers.map((function(e){var t=e.duplicate();return t.parent=s,t}));s.adjustToFit(),function e(t){var n,r=l(t||[]);try{for(r.s();!(n=r.n()).done;){var o=n.value;switch(o.type){case"SymbolInstance":h(o)?o.sketchObject.isVisible=!1:e([o.detach()]);break;case"Group":e(o.layers),new p({frame:new d(o.frame),name:"Combined shape",parent:o,layers:o.layers.filter((function(e){return"Shape"===e.type})),style:{fills:[{color:"#000"}],borders:[]}}).layers.forEach((function(e){e.sketchObject.setBooleanOperation(0)}));break;case"ShapePath":o.sketchObject.layersByConvertingToOutlines();break;case"Shape":h(o)&&(o.sketchObject.isVisible=!1),o.layers.forEach((function(e){e.sketchObject.setBooleanOperation(0)}))}}}catch(i){r.e(i)}finally{r.f()}}(u);var f=s.layers.filter((function(e){return"Group"===e.type}));o.a.export(f,{formats:"svg",output:i}),o.a.UI.message("Exported "+f.length.toString()+" assets to "+i),s.remove()}}}]);if("default"===e&&"function"==typeof n)n(t);else{if("function"!=typeof n[e])throw new Error('Missing export named "'+e+'". Your command should contain something like `export function " + key +"() {}`.');n[e](t)}}catch(r){if("undefined"==typeof process||!process.listenerCount||!process.listenerCount("uncaughtException"))throw r;process.emit("uncaughtException",r,"uncaughtException")}}globalThis.onRun=__skpm_run.bind(this,"default");
+var globalThis = this;
+var global = this;
+function __skpm_run (key, context) {
+  globalThis.context = context;
+  try {
+
+var exports =
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/my-command.js");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "./node_modules/@babel/runtime/helpers/arrayLikeToArray.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/arrayLikeToArray.js ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) {
+    arr2[i] = arr[i];
+  }
+
+  return arr2;
+}
+
+module.exports = _arrayLikeToArray;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/arrayWithHoles.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/arrayWithHoles.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+
+module.exports = _arrayWithHoles;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/iterableToArrayLimit.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/iterableToArrayLimit.js ***!
+  \*********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _iterableToArrayLimit(arr, i) {
+  var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]);
+
+  if (_i == null) return;
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+
+  var _s, _e;
+
+  try {
+    for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+
+module.exports = _iterableToArrayLimit;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/nonIterableRest.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/nonIterableRest.js ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+module.exports = _nonIterableRest;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/slicedToArray.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/slicedToArray.js ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var arrayWithHoles = __webpack_require__(/*! ./arrayWithHoles.js */ "./node_modules/@babel/runtime/helpers/arrayWithHoles.js");
+
+var iterableToArrayLimit = __webpack_require__(/*! ./iterableToArrayLimit.js */ "./node_modules/@babel/runtime/helpers/iterableToArrayLimit.js");
+
+var unsupportedIterableToArray = __webpack_require__(/*! ./unsupportedIterableToArray.js */ "./node_modules/@babel/runtime/helpers/unsupportedIterableToArray.js");
+
+var nonIterableRest = __webpack_require__(/*! ./nonIterableRest.js */ "./node_modules/@babel/runtime/helpers/nonIterableRest.js");
+
+function _slicedToArray(arr, i) {
+  return arrayWithHoles(arr) || iterableToArrayLimit(arr, i) || unsupportedIterableToArray(arr, i) || nonIterableRest();
+}
+
+module.exports = _slicedToArray;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/unsupportedIterableToArray.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/unsupportedIterableToArray.js ***!
+  \***************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var arrayLikeToArray = __webpack_require__(/*! ./arrayLikeToArray.js */ "./node_modules/@babel/runtime/helpers/arrayLikeToArray.js");
+
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return arrayLikeToArray(o, minLen);
+}
+
+module.exports = _unsupportedIterableToArray;
+module.exports["default"] = module.exports, module.exports.__esModule = true;
+
+/***/ }),
+
+/***/ "./node_modules/@skpm/dialog/lib/index.js":
+/*!************************************************!*\
+  !*** ./node_modules/@skpm/dialog/lib/index.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* let's try to match the API from Electron's Dialog
+(https://github.com/electron/electron/blob/master/docs/api/dialog.md) */
+
+module.exports = {
+  showOpenDialog: __webpack_require__(/*! ./open-dialog */ "./node_modules/@skpm/dialog/lib/open-dialog.js").openDialog,
+  showOpenDialogSync: __webpack_require__(/*! ./open-dialog */ "./node_modules/@skpm/dialog/lib/open-dialog.js").openDialogSync,
+  showSaveDialog: __webpack_require__(/*! ./save-dialog */ "./node_modules/@skpm/dialog/lib/save-dialog.js").saveDialog,
+  showSaveDialogSync: __webpack_require__(/*! ./save-dialog */ "./node_modules/@skpm/dialog/lib/save-dialog.js").saveDialogSync,
+  showMessageBox: __webpack_require__(/*! ./message-box */ "./node_modules/@skpm/dialog/lib/message-box.js").messageBox,
+  showMessageBoxSync: __webpack_require__(/*! ./message-box */ "./node_modules/@skpm/dialog/lib/message-box.js").messageBoxSync,
+  // showErrorBox: require('./error-box'),
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/@skpm/dialog/lib/message-box.js":
+/*!******************************************************!*\
+  !*** ./node_modules/@skpm/dialog/lib/message-box.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* eslint-disable no-not-accumulator-reassign/no-not-accumulator-reassign */
+var utils = __webpack_require__(/*! ./utils */ "./node_modules/@skpm/dialog/lib/utils.js")
+
+var typeMap = {
+  none: 0,
+  info: 1,
+  error: 2,
+  question: 1,
+  warning: 2,
+}
+
+function setupOptions(document, options) {
+  if (
+    !document ||
+    (typeof document.isKindOfClass !== 'function' && !document.sketchObject)
+  ) {
+    options = document
+    document = undefined
+  } else if (document.sketchObject) {
+    document = document.sketchObject
+  }
+  if (!options) {
+    options = {}
+  }
+
+  var dialog = NSAlert.alloc().init()
+
+  if (options.type) {
+    dialog.alertStyle = typeMap[options.type] || 0
+  }
+
+  if (options.buttons && options.buttons.length) {
+    options.buttons.forEach(function addButton(button) {
+      dialog.addButtonWithTitle(
+        options.normalizeAccessKeys ? button.replace(/&/g, '') : button
+      )
+      // TODO: add keyboard shortcut if options.normalizeAccessKeys
+    })
+  }
+
+  if (typeof options.defaultId !== 'undefined') {
+    var buttons = dialog.buttons()
+    if (options.defaultId < buttons.length) {
+      // Focus the button at defaultId if the user opted to do so.
+      // The first button added gets set as the default selected.
+      // So remove that default, and make the requested button the default.
+      buttons[0].setKeyEquivalent('')
+      buttons[options.defaultId].setKeyEquivalent('\r')
+    }
+  }
+
+  if (options.title) {
+    // not shown on macOS
+  }
+
+  if (options.message) {
+    dialog.messageText = options.message
+  }
+
+  if (options.detail) {
+    dialog.informativeText = options.detail
+  }
+
+  if (options.checkboxLabel) {
+    dialog.showsSuppressionButton = true
+    dialog.suppressionButton().title = options.checkboxLabel
+
+    if (typeof options.checkboxChecked !== 'undefined') {
+      dialog.suppressionButton().state = options.checkboxChecked
+        ? NSOnState
+        : NSOffState
+    }
+  }
+
+  if (options.icon) {
+    if (typeof options.icon === 'string') {
+      options.icon = NSImage.alloc().initWithContentsOfFile(options.icon)
+    }
+    dialog.icon = options.icon
+  } else if (
+    typeof __command !== 'undefined' &&
+    __command.pluginBundle() &&
+    __command.pluginBundle().icon()
+  ) {
+    dialog.icon = __command.pluginBundle().icon()
+  } else {
+    var icon = NSImage.imageNamed('plugins')
+    if (icon) {
+      dialog.icon = icon
+    }
+  }
+
+  return {
+    document: document,
+    options: options,
+    dialog: dialog,
+  }
+}
+
+// https://github.com/electron/electron/blob/master/docs/api/dialog.md#dialogshowmessageboxbrowserwindow-options
+module.exports.messageBox = function messageBox(document, options) {
+  var setup = setupOptions(document, options)
+
+  return utils.runDialog(
+    setup.dialog,
+    function getResult(_dialog, returnCode) {
+      return {
+        response:
+          setup.options.buttons && setup.options.buttons.length
+            ? Number(returnCode) - 1000
+            : Number(returnCode),
+        checkboxChecked: _dialog.suppressionButton().state() == NSOnState,
+      }
+    },
+    setup.document
+  )
+}
+
+// https://github.com/electron/electron/blob/master/docs/api/dialog.md#dialogshowmessageboxsyncbrowserwindow-options
+module.exports.messageBoxSync = function messageBoxSync(document, options) {
+  var setup = setupOptions(document, options)
+
+  return utils.runDialogSync(
+    setup.dialog,
+    function getResult(_dialog, returnCode) {
+      return setup.options.buttons && setup.options.buttons.length
+        ? Number(returnCode) - 1000
+        : Number(returnCode)
+    },
+    setup.document
+  )
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/@skpm/dialog/lib/open-dialog.js":
+/*!******************************************************!*\
+  !*** ./node_modules/@skpm/dialog/lib/open-dialog.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* eslint-disable no-not-accumulator-reassign/no-not-accumulator-reassign */
+var utils = __webpack_require__(/*! ./utils */ "./node_modules/@skpm/dialog/lib/utils.js")
+
+function setupOptions(document, options) {
+  if (
+    !document ||
+    (typeof document.isKindOfClass !== 'function' && !document.sketchObject)
+  ) {
+    options = document
+    document = undefined
+  }
+  if (!options) {
+    options = {}
+  }
+
+  var dialog = NSOpenPanel.openPanel()
+
+  if (options.title) {
+    dialog.title = options.title
+  }
+
+  if (options.defaultPath) {
+    dialog.setDirectoryURL(utils.getURL(options.defaultPath))
+  }
+
+  if (options.buttonLabel) {
+    dialog.prompt = options.buttonLabel
+  }
+
+  if (options.filters && options.filters.length) {
+    var exts = []
+    options.filters.forEach(function setFilter(filter) {
+      filter.extensions.forEach(function setExtension(ext) {
+        exts.push(ext)
+      })
+    })
+
+    dialog.allowedFileTypes = exts
+  }
+
+  var hasProperty =
+    Array.isArray(options.properties) && options.properties.length > 0
+  dialog.canChooseFiles =
+    hasProperty && options.properties.indexOf('openFile') !== -1
+  dialog.canChooseDirectories =
+    hasProperty && options.properties.indexOf('openDirectory') !== -1
+  dialog.allowsMultipleSelection =
+    hasProperty && options.properties.indexOf('multiSelections') !== -1
+  dialog.showsHiddenFiles =
+    hasProperty && options.properties.indexOf('showHiddenFiles') !== -1
+  dialog.canCreateDirectories =
+    hasProperty && options.properties.indexOf('createDirectory') !== -1
+  dialog.resolvesAliases =
+    !hasProperty || options.properties.indexOf('noResolveAliases') === -1
+  dialog.treatsFilePackagesAsDirectories =
+    hasProperty && options.properties.indexOf('treatPackageAsDirectory') !== -1
+
+  if (options.message) {
+    dialog.message = options.message
+  }
+
+  return {
+    document: document,
+    options: options,
+    dialog: dialog,
+  }
+}
+
+// https://github.com/electron/electron/blob/master/docs/api/dialog.md#dialogshowopendialogbrowserwindow-options
+module.exports.openDialog = function openDialog(document, options) {
+  var setup = setupOptions(document, options)
+
+  return utils.runDialog(
+    setup.dialog,
+    function getResult(_dialog, returnCode) {
+      if (returnCode != NSOKButton) {
+        return {
+          canceled: true,
+          filePaths: [],
+        }
+      }
+      var result = []
+      var urls = _dialog.URLs()
+      for (var k = 0; k < urls.length; k += 1) {
+        result.push(String(urls[k].path()))
+      }
+      return {
+        canceled: false,
+        filePaths: result,
+      }
+    },
+    setup.document
+  )
+}
+
+// https://github.com/electron/electron/blob/master/docs/api/dialog.md#dialogshowopendialogsyncbrowserwindow-options
+module.exports.openDialogSync = function openDialogSync(document, options) {
+  var setup = setupOptions(document, options)
+
+  return utils.runDialogSync(
+    setup.dialog,
+    function getResult(_dialog, returnCode) {
+      if (returnCode != NSOKButton) {
+        return []
+      }
+      var result = []
+      var urls = _dialog.URLs()
+      for (var k = 0; k < urls.length; k += 1) {
+        result.push(String(urls[k].path()))
+      }
+      return result
+    },
+    setup.document
+  )
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/@skpm/dialog/lib/save-dialog.js":
+/*!******************************************************!*\
+  !*** ./node_modules/@skpm/dialog/lib/save-dialog.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* eslint-disable no-not-accumulator-reassign/no-not-accumulator-reassign */
+var utils = __webpack_require__(/*! ./utils */ "./node_modules/@skpm/dialog/lib/utils.js")
+
+function setupOptions(document, options) {
+  if (
+    !document ||
+    (typeof document.isKindOfClass !== 'function' && !document.sketchObject)
+  ) {
+    options = document
+    document = undefined
+  }
+  if (!options) {
+    options = {}
+  }
+
+  var dialog = NSSavePanel.savePanel()
+
+  if (options.title) {
+    dialog.title = options.title
+  }
+
+  if (options.defaultPath) {
+    // that's a path
+    dialog.setDirectoryURL(utils.getURL(options.defaultPath))
+
+    if (
+      options.defaultPath[0] === '.' ||
+      options.defaultPath[0] === '~' ||
+      options.defaultPath[0] === '/'
+    ) {
+      var parts = options.defaultPath.split('/')
+      if (parts.length > 1 && parts[parts.length - 1]) {
+        dialog.setNameFieldStringValue(parts[parts.length - 1])
+      }
+    } else {
+      dialog.setNameFieldStringValue(options.defaultPath)
+    }
+  }
+
+  if (options.buttonLabel) {
+    dialog.prompt = options.buttonLabel
+  }
+
+  if (options.filters && options.filters.length) {
+    var exts = []
+    options.filters.forEach(function setFilter(filter) {
+      filter.extensions.forEach(function setExtension(ext) {
+        exts.push(ext)
+      })
+    })
+
+    if (dialog.allowedContentTypes) {
+      // Big Sur and newer.
+      dialog.allowedContentTypes = exts.map((ext) => UTType.typeWithFilenameExtension(ext))
+    } else {
+      // Catalina and older.
+      dialog.allowedFileTypes = exts
+    }
+  }
+
+  if (options.message) {
+    dialog.message = options.message
+  }
+
+  if (options.nameFieldLabel) {
+    dialog.nameFieldLabel = options.nameFieldLabel
+  }
+
+  if (options.showsTagField) {
+    dialog.showsTagField = options.showsTagField
+  }
+
+  return {
+    document: document,
+    options: options,
+    dialog: dialog,
+  }
+}
+
+// https://github.com/electron/electron/blob/master/docs/api/dialog.md#dialogshowsavedialogbrowserwindow-options
+module.exports.saveDialog = function saveDialog(document, options) {
+  var setup = setupOptions(document, options)
+
+  return utils.runDialog(
+    setup.dialog,
+    function getResult(_dialog, returnCode) {
+      return {
+        canceled: returnCode != NSOKButton,
+        filePath:
+          returnCode == NSOKButton ? String(_dialog.URL().path()) : undefined,
+      }
+    },
+    setup.document
+  )
+}
+
+// https://github.com/electron/electron/blob/master/docs/api/dialog.md#dialogshowsavedialogsyncbrowserwindow-options
+module.exports.saveDialogSync = function saveDialogSync(document, options) {
+  var setup = setupOptions(document, options)
+
+  return utils.runDialogSync(
+    setup.dialog,
+    function getResult(_dialog, returnCode) {
+      return returnCode == NSOKButton ? String(_dialog.URL().path()) : undefined
+    },
+    setup.document
+  )
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/@skpm/dialog/lib/utils.js":
+/*!************************************************!*\
+  !*** ./node_modules/@skpm/dialog/lib/utils.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(Promise) {module.exports.getURL = function getURL(path) {
+  return NSURL.URLWithString(
+    String(
+      NSString.stringWithString(path).stringByExpandingTildeInPath()
+    ).replace(/ /g, '%20')
+  )
+}
+
+module.exports.runDialog = function runDialog(dialog, getResult, document) {
+  if (!document) {
+    var returnCode = dialog.runModal()
+    return Promise.resolve(getResult(dialog, returnCode))
+  }
+
+  var fiber = coscript.createFiber()
+
+  var window = (document.sketchObject || document).documentWindow()
+
+  return new Promise(function p(resolve, reject) {
+    dialog.beginSheetModalForWindow_completionHandler(
+      window,
+      __mocha__.createBlock_function('v16@?0q8', function onCompletion(
+        _returnCode
+      ) {
+        try {
+          resolve(getResult(dialog, _returnCode))
+        } catch (err) {
+          reject(err)
+        }
+        NSApp.endSheet(dialog)
+        if (fiber) {
+          fiber.cleanup()
+        } else {
+          coscript.shouldKeepAround = false
+        }
+      })
+    )
+  })
+}
+
+module.exports.runDialogSync = function runDialog(dialog, getResult, document) {
+  var returnCode
+
+  if (!document) {
+    returnCode = dialog.runModal()
+    return getResult(dialog, returnCode)
+  }
+
+  var window = (document.sketchObject || document).documentWindow()
+
+  dialog.beginSheetModalForWindow_completionHandler(
+    window,
+    __mocha__.createBlock_function('v16@?0q8', function onCompletion(
+      _returnCode
+    ) {
+      NSApp.stopModalWithCode(_returnCode)
+    })
+  )
+
+  returnCode = NSApp.runModalForWindow(window)
+  NSApp.endSheet(dialog)
+  return getResult(dialog, returnCode)
+}
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@skpm/promise/index.js */ "./node_modules/@skpm/promise/index.js")))
+
+/***/ }),
+
+/***/ "./node_modules/@skpm/promise/index.js":
+/*!*********************************************!*\
+  !*** ./node_modules/@skpm/promise/index.js ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* from https://github.com/taylorhakes/promise-polyfill */
+
+function promiseFinally(callback) {
+  var constructor = this.constructor;
+  return this.then(
+    function(value) {
+      return constructor.resolve(callback()).then(function() {
+        return value;
+      });
+    },
+    function(reason) {
+      return constructor.resolve(callback()).then(function() {
+        return constructor.reject(reason);
+      });
+    }
+  );
+}
+
+function noop() {}
+
+/**
+ * @constructor
+ * @param {Function} fn
+ */
+function Promise(fn) {
+  if (!(this instanceof Promise))
+    throw new TypeError("Promises must be constructed via new");
+  if (typeof fn !== "function") throw new TypeError("not a function");
+  /** @type {!number} */
+  this._state = 0;
+  /** @type {!boolean} */
+  this._handled = false;
+  /** @type {Promise|undefined} */
+  this._value = undefined;
+  /** @type {!Array<!Function>} */
+  this._deferreds = [];
+
+  doResolve(fn, this);
+}
+
+function handle(self, deferred) {
+  while (self._state === 3) {
+    self = self._value;
+  }
+  if (self._state === 0) {
+    self._deferreds.push(deferred);
+    return;
+  }
+  self._handled = true;
+  Promise._immediateFn(function() {
+    var cb = self._state === 1 ? deferred.onFulfilled : deferred.onRejected;
+    if (cb === null) {
+      (self._state === 1 ? resolve : reject)(deferred.promise, self._value);
+      return;
+    }
+    var ret;
+    try {
+      ret = cb(self._value);
+    } catch (e) {
+      reject(deferred.promise, e);
+      return;
+    }
+    resolve(deferred.promise, ret);
+  });
+}
+
+function resolve(self, newValue) {
+  try {
+    // Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
+    if (newValue === self)
+      throw new TypeError("A promise cannot be resolved with itself.");
+    if (
+      newValue &&
+      (typeof newValue === "object" || typeof newValue === "function")
+    ) {
+      var then = newValue.then;
+      if (newValue instanceof Promise) {
+        self._state = 3;
+        self._value = newValue;
+        finale(self);
+        return;
+      } else if (typeof then === "function") {
+        doResolve(then.bind(newValue), self);
+        return;
+      }
+    }
+    self._state = 1;
+    self._value = newValue;
+    finale(self);
+  } catch (e) {
+    reject(self, e);
+  }
+}
+
+function reject(self, newValue) {
+  self._state = 2;
+  self._value = newValue;
+  finale(self);
+}
+
+function finale(self) {
+  if (self._state === 2 && self._deferreds.length === 0) {
+    Promise._immediateFn(function() {
+      if (!self._handled) {
+        Promise._unhandledRejectionFn(self._value, self);
+      }
+    });
+  }
+
+  for (var i = 0, len = self._deferreds.length; i < len; i++) {
+    handle(self, self._deferreds[i]);
+  }
+  self._deferreds = null;
+}
+
+/**
+ * @constructor
+ */
+function Handler(onFulfilled, onRejected, promise) {
+  this.onFulfilled = typeof onFulfilled === "function" ? onFulfilled : null;
+  this.onRejected = typeof onRejected === "function" ? onRejected : null;
+  this.promise = promise;
+}
+
+/**
+ * Take a potentially misbehaving resolver function and make sure
+ * onFulfilled and onRejected are only called once.
+ *
+ * Makes no guarantees about asynchrony.
+ */
+function doResolve(fn, self) {
+  var done = false;
+  try {
+    fn(
+      function(value) {
+        if (done) {
+          Promise._multipleResolvesFn("resolve", self, value);
+          return;
+        }
+        done = true;
+        resolve(self, value);
+      },
+      function(reason) {
+        if (done) {
+          Promise._multipleResolvesFn("reject", self, reason);
+          return;
+        }
+        done = true;
+        reject(self, reason);
+      }
+    );
+  } catch (ex) {
+    if (done) {
+      Promise._multipleResolvesFn("reject", self, ex);
+      return;
+    }
+    done = true;
+    reject(self, ex);
+  }
+}
+
+Promise.prototype["catch"] = function(onRejected) {
+  return this.then(null, onRejected);
+};
+
+Promise.prototype.then = function(onFulfilled, onRejected) {
+  // @ts-ignore
+  var prom = new this.constructor(noop);
+
+  handle(this, new Handler(onFulfilled, onRejected, prom));
+  return prom;
+};
+
+Promise.prototype["finally"] = promiseFinally;
+
+Promise.all = function(arr) {
+  return new Promise(function(resolve, reject) {
+    if (!Array.isArray(arr)) {
+      return reject(new TypeError("Promise.all accepts an array"));
+    }
+
+    var args = Array.prototype.slice.call(arr);
+    if (args.length === 0) return resolve([]);
+    var remaining = args.length;
+
+    function res(i, val) {
+      try {
+        if (val && (typeof val === "object" || typeof val === "function")) {
+          var then = val.then;
+          if (typeof then === "function") {
+            then.call(
+              val,
+              function(val) {
+                res(i, val);
+              },
+              reject
+            );
+            return;
+          }
+        }
+        args[i] = val;
+        if (--remaining === 0) {
+          resolve(args);
+        }
+      } catch (ex) {
+        reject(ex);
+      }
+    }
+
+    for (var i = 0; i < args.length; i++) {
+      res(i, args[i]);
+    }
+  });
+};
+
+Promise.resolve = function(value) {
+  if (value && typeof value === "object" && value.constructor === Promise) {
+    return value;
+  }
+
+  return new Promise(function(resolve) {
+    resolve(value);
+  });
+};
+
+Promise.reject = function(value) {
+  return new Promise(function(resolve, reject) {
+    reject(value);
+  });
+};
+
+Promise.race = function(arr) {
+  return new Promise(function(resolve, reject) {
+    if (!Array.isArray(arr)) {
+      return reject(new TypeError("Promise.race accepts an array"));
+    }
+
+    for (var i = 0, len = arr.length; i < len; i++) {
+      Promise.resolve(arr[i]).then(resolve, reject);
+    }
+  });
+};
+
+// Use polyfill for setImmediate for performance gains
+Promise._immediateFn = setImmediate;
+
+Promise._unhandledRejectionFn = function _unhandledRejectionFn(err, promise) {
+  if (
+    typeof process !== "undefined" &&
+    process.listenerCount &&
+    (process.listenerCount("unhandledRejection") ||
+      process.listenerCount("uncaughtException"))
+  ) {
+    process.emit("unhandledRejection", err, promise);
+    process.emit("uncaughtException", err, "unhandledRejection");
+  } else if (typeof console !== "undefined" && console) {
+    console.warn("Possible Unhandled Promise Rejection:", err);
+  }
+};
+
+Promise._multipleResolvesFn = function _multipleResolvesFn(
+  type,
+  promise,
+  value
+) {
+  if (typeof process !== "undefined" && process.emit) {
+    process.emit("multipleResolves", type, promise, value);
+  }
+};
+
+module.exports = Promise;
+
+
+/***/ }),
+
+/***/ "./src/my-command.js":
+/*!***************************!*\
+  !*** ./src/my-command.js ***!
+  \***************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var sketch__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sketch */ "sketch");
+/* harmony import */ var sketch__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sketch__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _skpm_dialog__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @skpm/dialog */ "./node_modules/@skpm/dialog/lib/index.js");
+/* harmony import */ var _skpm_dialog__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_skpm_dialog__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./util */ "./src/util.js");
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+// documentation: https://developer.sketchapp.com/reference/api/
+
+
+
+var Shape = sketch__WEBPACK_IMPORTED_MODULE_0___default.a.Shape,
+    Rectangle = sketch__WEBPACK_IMPORTED_MODULE_0___default.a.Rectangle;
+
+function isBackgroundNode(node) {
+  return node.name.toLowerCase().includes('background');
+}
+/**
+ * Recursively transform nodes to be suitable for export as iconfont SVGs.
+ */
+
+
+function transformNodesForExport(nodes) {
+  var _iterator = _createForOfIteratorHelper(nodes || []),
+      _step;
+
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var node = _step.value;
+
+      switch (node.type) {
+        case 'SymbolInstance':
+          {
+            if (isBackgroundNode(node)) {
+              node.sketchObject.isVisible = false;
+            } else {
+              transformNodesForExport([node.detach()]);
+            }
+
+            break;
+          }
+
+        case 'Group':
+          {
+            transformNodesForExport(node.layers); // Union child layers together.
+
+            var combinedShape = new Shape({
+              frame: new Rectangle(node.frame),
+              name: 'Combined shape',
+              parent: node,
+              layers: node.layers.filter(function (layer) {
+                return layer.type === 'Shape';
+              }),
+              style: {
+                fills: [{
+                  color: '#000'
+                }],
+                borders: []
+              }
+            });
+            combinedShape.layers.forEach(function (layer) {
+              layer.sketchObject.setBooleanOperation(0);
+            });
+            break;
+          }
+
+        case 'ShapePath':
+          node.sketchObject.layersByConvertingToOutlines();
+          break;
+
+        case 'Shape':
+          {
+            if (isBackgroundNode(node)) {
+              node.sketchObject.isVisible = false;
+            }
+
+            node.layers.forEach(function (layer) {
+              layer.sketchObject.setBooleanOperation(0);
+            });
+            break;
+          }
+      }
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (function () {
+  var document = sketch__WEBPACK_IMPORTED_MODULE_0___default.a.getSelectedDocument();
+  var selectedLayers = document.selectedLayers;
+  var selectedCount = selectedLayers.length;
+
+  if (selectedCount === 0) {
+    sketch__WEBPACK_IMPORTED_MODULE_0___default.a.UI.message('No layers are selected, nothing to do');
+  } else {
+    var paths = _skpm_dialog__WEBPACK_IMPORTED_MODULE_1___default.a.showOpenDialogSync(document, {
+      title: 'Select export folder…',
+      properties: ['openDirectory', 'createDirectory']
+    });
+
+    if (paths.length !== 1) {
+      sketch__WEBPACK_IMPORTED_MODULE_0___default.a.UI.message('Cancelled');
+      return;
+    }
+
+    var output = paths[0];
+    sketch__WEBPACK_IMPORTED_MODULE_0___default.a.UI.message('Preparing ' + selectedCount + ' object(s)…');
+    var tmpArtboard = Object(_util__WEBPACK_IMPORTED_MODULE_2__["createScratchArtboard"])(document.selectedPage);
+    var layers = selectedLayers.layers.map(function (layer) {
+      var copy = layer.duplicate();
+      copy.parent = tmpArtboard;
+      return copy;
+    });
+    tmpArtboard.adjustToFit();
+    transformNodesForExport(layers);
+    var exportLayers = tmpArtboard.layers.filter(function (layer) {
+      return layer.type === 'Group';
+    });
+    sketch__WEBPACK_IMPORTED_MODULE_0___default.a.export(exportLayers, {
+      formats: 'svg',
+      output: output
+    });
+    sketch__WEBPACK_IMPORTED_MODULE_0___default.a.UI.message('Exported ' + exportLayers.length.toString() + ' assets to ' + output);
+    tmpArtboard.remove();
+  }
+});
+
+/***/ }),
+
+/***/ "./src/util.js":
+/*!*********************!*\
+  !*** ./src/util.js ***!
+  \*********************/
+/*! exports provided: createScratchArtboard */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createScratchArtboard", function() { return createScratchArtboard; });
+/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "./node_modules/@babel/runtime/helpers/slicedToArray.js");
+/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var sketch__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sketch */ "sketch");
+/* harmony import */ var sketch__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sketch__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var NEW_ARTBOARD_OFFSET = 50;
+
+function findNewArtboardCoords(page) {
+  var _page$layers$reduce = page.layers.reduce(function (_ref, layer) {
+    var _ref2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(_ref, 2),
+        ox = _ref2[0],
+        oy = _ref2[1];
+
+    var x = layer.frame.x + layer.frame.width;
+    var y = layer.frame.y;
+    return [x > ox ? x : ox, y < oy ? y : oy];
+  }, [Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY]),
+      _page$layers$reduce2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(_page$layers$reduce, 2),
+      x = _page$layers$reduce2[0],
+      y = _page$layers$reduce2[1];
+
+  return [x + NEW_ARTBOARD_OFFSET, y];
+}
+
+function createScratchArtboard(parentPage) {
+  var artboard = new sketch__WEBPACK_IMPORTED_MODULE_1___default.a.Artboard({
+    name: 'Scratch',
+    parent: parentPage
+  });
+  var newFrame = artboard.frame.changeBasis({
+    from: artboard,
+    to: artboard.parent
+  });
+
+  var _findNewArtboardCoord = findNewArtboardCoords(parentPage),
+      _findNewArtboardCoord2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(_findNewArtboardCoord, 2),
+      x = _findNewArtboardCoord2[0],
+      y = _findNewArtboardCoord2[1];
+
+  newFrame.x = x;
+  newFrame.y = y;
+  artboard.frame = newFrame;
+  return artboard;
+}
+
+/***/ }),
+
+/***/ "sketch":
+/*!*************************!*\
+  !*** external "sketch" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("sketch");
+
+/***/ })
+
+/******/ });
+    if (key === 'default' && typeof exports === 'function') {
+      exports(context);
+    } else if (typeof exports[key] !== 'function') {
+      throw new Error('Missing export named "' + key + '". Your command should contain something like `export function " + key +"() {}`.');
+    } else {
+      exports[key](context);
+    }
+  } catch (err) {
+    if (typeof process !== 'undefined' && process.listenerCount && process.listenerCount('uncaughtException')) {
+      process.emit("uncaughtException", err, "uncaughtException");
+    } else {
+      throw err
+    }
+  }
+}
+globalThis['onRun'] = __skpm_run.bind(this, 'default')
+
+//# sourceMappingURL=__my-command.js.map

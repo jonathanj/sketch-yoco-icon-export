@@ -5,7 +5,6 @@
   "author" : "Jonathan Jacobs",
   "authorEmail" : "jonathan@yoco.com",
   "homepage": "https://github.com/jonathanj/sketch-yoco-icon-export",
-  "version" : "1.0.3",
   "appcast": "https://raw.githubusercontent.com/jonathanj/sketch-yoco-icon-export/master/.appcast.xml",
   "description" : "Prepare and export stroked icons for the Yoco icon library.",
   "commands": [
